@@ -2,7 +2,7 @@
 
 function install_dependencies()
 {
-    sudo apt-get install -y build-essential devscripts dpatch curl libassuan-dev libpcre3-dev libpth-dev libwrap0-dev libgmp-dev libgmp3-dev libgpgme11 libgpgme11-dev quilt cmake pkg-config libpcap0.8 libpcap0.8-dev uuid-runtime uuid-dev bison libksba8 libksba-dev doxygen libsql-translator-perl xmltoman sqlite3 libsqlite3-dev wamerican libhiredis0.13 libhiredis-dev libsnmp-base libsnmp-dev libmicrohttpd-dev libxml2-dev libxslt1-dev xsltproc libldap-2.4-2 libldap2-dev autoconf nmap libgnutls28-dev gnutls-bin libpopt-dev heimdal-dev heimdal-multidev mingw-w64 texlive-full rpm alien nsis rsync python2.7 python-setuptools checkinstall libmicrohttpd10 libmicrohttpd-dev libglib2.0-dev libperl-dev libssh-4 libssh-dev flex libfreeradius-client2 libfreeradius-client-dev clang-4.0
+    sudo apt-get install -y build-essential devscripts dpatch curl libassuan-dev libpcre3-dev libpth-dev libwrap0-dev libgmp-dev libgmp3-dev libgpgme11 libgpgme11-dev quilt cmake pkg-config libpcap0.8 libpcap0.8-dev uuid-runtime uuid-dev bison libksba8 libksba-dev doxygen libsql-translator-perl xmltoman sqlite3 libsqlite3-dev wamerican libhiredis0.13 libhiredis-dev libsnmp-base libsnmp-dev libmicrohttpd-dev libxml2-dev libxslt1-dev xsltproc libldap-2.4-2 libldap2-dev autoconf nmap libgnutls30 libgnutls-dev gnutls-bin libpopt-dev heimdal-dev heimdal-multidev mingw-w64 texlive-full rpm alien nsis rsync python2.7 python-setuptools checkinstall libmicrohttpd10 libmicrohttpd-dev libglib2.0-dev libperl-dev libssh2-1 libssh2-1-dev libssh-dev flex libfreeradius-client2 libfreeradius-client-dev clang-4.0
 }
 
 function get_openvas_source_table()
