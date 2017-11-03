@@ -1,8 +1,43 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function install_dependencies()
 {
     sudo apt-get install -y build-essential devscripts dpatch curl libassuan-dev libpcre3-dev libpth-dev libwrap0-dev libgmp-dev libgmp3-dev libgpgme11 libgpgme11-dev quilt cmake pkg-config libpcap0.8 libpcap0.8-dev uuid-runtime uuid-dev bison libksba8 libksba-dev doxygen libsql-translator-perl xmltoman sqlite3 libsqlite3-dev wamerican libhiredis0.13 libhiredis-dev libsnmp-base libsnmp-dev libmicrohttpd-dev libxml2-dev libxslt1-dev xsltproc libldap-2.4-2 libldap2-dev autoconf nmap libgnutls30 libgnutls-dev gnutls-bin libpopt-dev heimdal-dev heimdal-multidev mingw-w64 texlive-full rpm alien nsis rsync python2.7 python-setuptools checkinstall libmicrohttpd10 libmicrohttpd-dev libglib2.0-dev libperl-dev libssh2-1 libssh2-1-dev libssh-dev flex libfreeradius-client2 libfreeradius-client-dev clang-4.0
+}
+
+function install_redis_source()
+{
+    # https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+    # Add Creative Commons note here
+    # Install Redis from source
+    sudo apt-get -y update
+    sudo apt-get -y install build-essential tcl
+    cd /tmp
+    curl -O http://download.redis.io/redis-stable.tar.gz
+    tar xzvf redis-stable.tar.gz
+    cd redis-stable
+
+    make
+    make test
+    sudo make install
+
+    sudo mkdir /etc/redis
+    cd /etc/redis
+    wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/redis.conf
+    cd /etc/systemd/system/
+    wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/redis.service
+
+    sudo adduser --system --group --no-create-home redis
+    sudo mkdir /var/lib/redis
+    sudo chown redis:redis /var/lib/redis
+    sudo chmod 770 /var/lib/redis
+
+    sudo systemctl start redis
+
+    sudo systemctl enable redis
+
+    echo -n "Redis is currently: "
+    sudo systemctl is-active redis
 }
 
 function get_openvas_source_table()
@@ -73,49 +108,62 @@ function mkcerts()
     openvas-manage-certs -a 2>/dev/null
 }
 
+function install_service()
+{
+    cd /etc/init.d/
+    sudo wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/openvas_start
+    sudo chmod +x openvas_start 
+    sudo update-rc.d openvas_start defaults
+}
+
 function print_help()
 {
 
     echo "Usage: ./openvas_commander.sh OPTION [PARAM]
 
  Installing dependencies:
-  --install-dependencies           install Debian packages 
+  --install-dependencies           Install Debian packages
+  --install-redis-source           Install Redis from source files and configure it for use
 
  Getting data from openvas.org:
-  --show-releases                  show release version, e.g. OpenVAS-9
-  --show-sources RELEASE           show RELEASE source archives
-  --download-sources RELEASE       download RELEASE sources archives
+  --show-releases                  Show release version, e.g. OpenVAS-9
+  --show-sources RELEASE           Show RELEASE source archives
+  --download-sources RELEASE       Download RELEASE sources archives
 
  Process software components:
-  --create-folders                 create folders for sources archives
+  --create-folders                 Create folders for sources archives
 
-  --install-all                    install all components
-  --install-component COMPONENT    install COMPONENT
+  --install-all                    Install all components
+  --install-component COMPONENT    Install COMPONENT
 
-  --uninstall-all                  uninstall all components
-  --uninstall-component COMPONENT  uninstall COMPONENT
+  --uninstall-all                  Uninstall all components
+  --uninstall-component COMPONENT  Uninstall COMPONENT
 
  Configuration:
-  --configure-all                  configure all components
-  --delete-admin                   delete OpenVAS admin account
+  --configure-all                  Configure all components
+  --delete-admin                   Delete OpenVAS admin account
 
  Process software components:
-  --update-content                 update OpenVAS NVT, OVAL and CERT content
-  --update-content-nvt             update only OpenVAS NVT content
-  --rebuild-content                rebuild database
+  --update-content                 Update OpenVAS NVT, OVAL and CERT content
+  --update-content-nvt             Update only OpenVAS NVT content
+  --rebuild-content                Rebuild database
 
  Manage processes:
-  --start-all                      start openvasmd, openvassd and gsad processes
-                                   use --check-proc to make sure that processes ready
-  --kill-all                       kill openvasmd, openvassd and gsad processes
-  --check-proc                     check state of openvasmd, openvassd and gsad processes
+  --start-all                      Start openvasmd, openvassd and gsad processes
+                                   Use --check-proc to make sure that processes ready
+  --kill-all                       Kill openvasmd, openvassd and gsad processes
+  --check-proc                     Check state of openvasmd, openvassd and gsad processes
 
  Check installation status:
-  --check-status [VERSION]         download and run openvas-check-setup tool
+  --check-status [VERSION]         Download and run openvas-check-setup tool
                                    \"v9\" by default
-  
+ Post-install:
+  --install-service                Install OpenVAS service and launcher script
+                                   Will configure OpenVAS to launch on startup
+                                   NOTE: After logging in, around 5 minutes will be needed 
+                                   before OpenVAS can be used to allow openvassd to reload NVTs
  Other:
-  --help, -h, ?                    help page"
+  --help, -h, ?                    Help page"
 
 }
 
@@ -130,6 +178,9 @@ then
 elif [ "$1" == "--install-dependencies" ]
 then
     install_dependencies
+elif [ "$1" == "--install-redis-source" ]
+then
+    install_redis_source
 elif [ "$1" == "--show-releases" ]
 then
     get_available_source_sets
@@ -247,6 +298,9 @@ then
 elif  [ "$1" == "--check-proc" ]
 then
     ps aux | egrep "(openvas.d|gsad)"
+elif [ "$1" == "--install-service" ]
+then
+    install_service
 else
     echo "Unknown command"
     print_help
