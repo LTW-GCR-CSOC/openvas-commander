@@ -110,10 +110,16 @@ function mkcerts()
 
 function install_service()
 {
-    cd /etc/init.d/
-    sudo wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/openvas_start
-    sudo chmod +x openvas_start 
-    sudo update-rc.d openvas_start defaults
+    cd /etc/systemd/system/
+    sudo wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/openvas.service
+
+    cd /usr/local/sbin/
+    sudo wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/openvas_launcher
+    sudo chmod +x openvas_launcher
+
+    sudo systemctl start openvas
+
+    sudo systemctl enable openvas
 }
 
 function print_help()
