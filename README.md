@@ -7,6 +7,8 @@ The following was tested on a [Raspberry Pi 3](https://www.raspberrypi.org) with
 
 The install process took around 1-3 hours on the VM instance, while the Raspberry Pi 3 took around 4-6 hours.
 
+Before installing, make sure that all the latest updates for the currently installed packages have been installed.
+
 To avoid problems during installation, run all commands as the root user (either through ```sudo su``` or ```sudo <COMMAND>```)
 
 ***Method 1: Use the automated Bash script***
