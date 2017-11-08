@@ -55,7 +55,7 @@ Once it's confirmed that OpenVAS installed correctly, open a web browser and go 
 
 ## Getting help
 
-If there is confusion on what openvas_commander can do, use ```./openvas_commander --help```
+If there is confusion on what openvas-commander can do, use ```./openvas_commander --help```
 
 In the event OpenVAS didn't install correctly, use ```sudo ./openvas_commander.sh --check-status v9``` to narrow down the issue.
 
