@@ -23,9 +23,9 @@ function install_redis_source()
 
     sudo mkdir /etc/redis
     cd /etc/redis
-    wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/redis.conf
+    wget https://raw.githubusercontent.com/LTW-GCR-CSOC/openvas-commander/master/InstallerFiles/redis.conf
     cd /etc/systemd/system/
-    wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/redis.service
+    wget https://raw.githubusercontent.com/LTW-GCR-CSOC/openvas-commander/master/InstallerFiles/redis.service
 
     sudo adduser --system --group --no-create-home redis
     sudo mkdir /var/lib/redis
@@ -111,10 +111,10 @@ function mkcerts()
 function install_service()
 {
     cd /etc/systemd/system/
-    sudo wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/openvas.service
+    sudo wget https://raw.githubusercontent.com/LTW-GCR-CSOC/openvas-commander/master/InstallerFiles/openvas.service
 
     cd /usr/local/sbin/
-    sudo wget https://raw.githubusercontent.com/LTW-GCR-CSOC/csoc-installation-scripts/master/InstallerFiles/openvas_launcher
+    sudo wget https://raw.githubusercontent.com/LTW-GCR-CSOC/openvas-commander/master/InstallerFiles/openvas_launcher
     sudo chmod +x openvas_launcher
 
     sudo systemctl start openvas
